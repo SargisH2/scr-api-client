@@ -11,7 +11,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 SERVER_URL = "https://scraping-api-app-b55c363cbea4.herokuapp.com/"
-WEBHOOK_URL = "http://127.0.0.1:8080/webhook/" # set port to 8080
+WEBHOOK_URL = "https://scr-api-client-dc9dac13f391.herokuapp.com/webhook/" # set port to 8080
 
 class SearchQueryWebHook(BaseModel):
     query: str
