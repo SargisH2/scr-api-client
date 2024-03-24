@@ -18,8 +18,9 @@ async function submitRequest() {
         if (response.ok) {
             const result = await response.json();
             // Save the response globally for downloading
-            window.responseData = result;
-            document.getElementById('downloadBtn').style.display = 'inline-block';
+            console.log(result)
+            const queryId = result.query_id;
+            pollForData(queryId); 
         } else {
             console.error('Failed to fetch');
         }
@@ -33,8 +34,11 @@ function pollForData(queryId) {
 
         if (data.message !== "Data not available yet.") {
             clearInterval(intervalId);
-            // Assuming 'data' contains the actual data you want to download
-            downloadJSON(data, queryId);
+            btn = document.getElementById('downloadBtn')
+            btn.style.display = 'inline-block';
+            btn.onclick = function() {
+                downloadJSON(data, queryId);
+            };
         }
     }, 2000); // Poll every 2 seconds
 }
@@ -42,9 +46,9 @@ function pollForData(queryId) {
 function downloadJSON(data, filename) {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
     const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("href",     dataStr);
     downloadAnchorNode.setAttribute("download", `${filename}.json`);
-    document.body.appendChild(downloadAnchorNode);
+    document.body.appendChild(downloadAnchorNode); // Required for Firefox
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
 }
