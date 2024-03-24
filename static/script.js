@@ -32,13 +32,19 @@ function pollForData(queryId) {
         const response = await fetch(`/data/${queryId}`);
         const data = await response.json();
 
+        const statusLine = document.getElementById('status_line');
+        statusLine.textContent = 'Processing your request...';
+
         if (data.message !== "Data not available yet.") {
             clearInterval(intervalId);
+            statusLine.textContent = 'Data is ready for download.';
             btn = document.getElementById('downloadBtn')
             btn.style.display = 'inline-block';
             btn.onclick = function() {
                 downloadJSON(data, queryId);
             };
+        } else {
+            statusLine.textContent = 'Still processing... Please wait.';
         }
     }, 2000); // Poll every 2 seconds
 }
